@@ -148,7 +148,7 @@ app.get('/', (req, res) => {
                                                             var options = {
                                                                 'method': 'GET',
                                                                 'hostname': 'pwisetthon.com',
-                                                                'path': '/setmvbg.php?naa=' + name + artname + '&gifurl=' + gifurl,
+                                                                'path': '/setmvbg.php?naa=' + encodeURIComponent(name) + encodeURIComponent(artname) + '&gifurl=' + gifurl,
                                                                 'headers': {
                                                                 },
                                                                 'maxRedirects': 20
