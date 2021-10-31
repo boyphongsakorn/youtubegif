@@ -9,9 +9,9 @@ var request = require('request');
 const app = express()
 const port = process.env.PORT || 1500;
 
-let downloadlink, videourl, artname, name
-
 app.get('/', (req, res) => {
+    
+    let downloadlink, videourl, artname, name
 
     name = req.query.name.replace(/\s/g, '').toLowerCase()
 
