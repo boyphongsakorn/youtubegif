@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
     var options = {
         'method': 'GET',
         'hostname': 'pwisetthon.com',
-        'path': '/getmvbg.php?nameandart=' + name + '' + artname,
+        'path': '/getmvbg.php?nameandart=' + encodeURIComponent(name) + '' + encodeURIComponent(artname),
         'headers': {
         },
         'maxRedirects': 20
