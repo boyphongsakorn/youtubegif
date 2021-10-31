@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
                 console.log(body.toString());
                 res.send(body.toString())
             } else {
-                const urlpath = encodeURI('/youtube/v3/search?part=snippet&order=viewCount&q=' + name + artname + ' music video&type=video&videoCategoryId=10&key=AIzaSyCKnojj634as24PXtBsL6KUGxEv53C4W4U');
+                const urlpath = encodeURI('/youtube/v3/search?part=snippet&order=viewCount&q=' + name + artname + ' music video&key=AIzaSyCKnojj634as24PXtBsL6KUGxEv53C4W4U');
                 var options = {
                     'method': 'GET',
                     'hostname': 'youtube.googleapis.com',
@@ -63,16 +63,17 @@ app.get('/', (req, res) => {
 
                     resyt.on("end", function (chunk) {
                         var body = Buffer.concat(chunks);
+                        const youtubeid = JSON.parse(body)["items"][0]["id"]["videoId"]
                         //console.log(body.toString());
-                        console.log(JSON.parse(body)["items"][0]["id"]["videoId"])
-                        youtubedl('https://www.youtube.com/watch?v=' + JSON.parse(body)["items"][0]["id"]["videoId"], {
+                        console.log(youtubeid)
+                        youtubedl('https://www.youtube.com/watch?v=' + youtubeid, {
                             dumpSingleJson: true,
                             noWarnings: true,
                             noCallHome: true,
                             noCheckCertificate: true,
                             preferFreeFormats: true,
                             youtubeSkipDashManifest: true,
-                            referer: 'https://www.youtube.com/watch?v=' + JSON.parse(body)["items"][0]["id"]["videoId"]
+                            referer: 'https://www.youtube.com/watch?v=' + youtubeid
                         })
                             .then(output => {
                                 downloadlink = output["formats"]
@@ -109,12 +110,12 @@ app.get('/', (req, res) => {
 
                                         //let adamndur
 
-                                        getVideoDurationInSeconds('video.mp4').then((duration) => {
+                                        getVideoDurationInSeconds('video'+youtubeid+'.mp4').then((duration) => {
                                             console.log(duration)
-                                            ffmpeg('video.mp4')
+                                            ffmpeg('video'+youtubeid+'.mp4')
                                                 .setStartTime(new Date((parseInt(duration) - 30) * 1000).toISOString().substr(11, 8))
                                                 .setDuration(25)
-                                                .output('aftercut.mp4')
+                                                .output('aftercut'+youtubeid+'.mp4')
                                                 .on('end', function (err) {
                                                     if (!err) {
                                                         console.log('successfully converted');
@@ -127,9 +128,9 @@ app.get('/', (req, res) => {
                                                             },
                                                             formData: {
                                                               'file': {
-                                                                'value': fs.createReadStream('aftercut.mp4'),
+                                                                'value': fs.createReadStream('aftercut'+youtubeid+'.mp4'),
                                                                 'options': {
-                                                                  'filename': 'aftercut.mp4',
+                                                                  'filename': 'aftercut'+youtubeid+'.mp4',
                                                                   'contentType': null
                                                                 }
                                                               }
@@ -147,7 +148,7 @@ app.get('/', (req, res) => {
                                                             var options = {
                                                                 'method': 'GET',
                                                                 'hostname': 'pwisetthon.com',
-                                                                'path': '/setmvbg.php?naa=' + encodeURIComponent(name) + encodeURIComponent(artname) + '&gifurl=' + gifurl,
+                                                                'path': '/setmvbg.php?naa=' + name + artname + '&gifurl=' + gifurl,
                                                                 'headers': {
                                                                 },
                                                                 'maxRedirects': 20
@@ -165,17 +166,6 @@ app.get('/', (req, res) => {
                                                                     console.log(body.toString());
                                                                     if (body.toString() == "New record created successfully") {
                                                                         res.send(gifurl)
-                                                                        fs.stat('video.mp4', function (err, stats) {
-                                                                        console.log(stats);//here we got all information of file in stats variable
-
-                                                                        if (err) {
-                                                                           return console.error(err);
-                                                                        }
-
-                                                                        fs.unlink('video.mp4',function(err){
-                                                                           if(err) return console.log(err);
-                                                                           console.log('file deleted successfully');
-                                                                        });  
                                                                     }
                                                                 });
 
