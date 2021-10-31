@@ -76,7 +76,7 @@ app.get('/', (req, res) => {
                         })
                             .then(output => {
                                 downloadlink = output["formats"]
-                                console.log(output)
+                                //console.log(output)
                                 //console.log(downloadlink)
                                 downloadlink.forEach(element => {
                                     if (element["format"].search("360p") > 0 && videourl == null) {
@@ -141,6 +141,8 @@ app.get('/', (req, res) => {
                                                             console.log(response.body);
 
                                                             let gifurl = JSON.parse(response.body)["success"]["files"]["gif"];
+
+                                                            console.log(name + artname)
 
                                                             var options = {
                                                                 'method': 'GET',
