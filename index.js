@@ -165,6 +165,17 @@ app.get('/', (req, res) => {
                                                                     console.log(body.toString());
                                                                     if (body.toString() == "New record created successfully") {
                                                                         res.send(gifurl)
+                                                                        fs.stat('video.mp4', function (err, stats) {
+                                                                        console.log(stats);//here we got all information of file in stats variable
+
+                                                                        if (err) {
+                                                                           return console.error(err);
+                                                                        }
+
+                                                                        fs.unlink('video.mp4',function(err){
+                                                                           if(err) return console.log(err);
+                                                                           console.log('file deleted successfully');
+                                                                        });  
                                                                     }
                                                                 });
 
