@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
                 console.log(body.toString());
                 res.send(body.toString())
             } else {
-                const urlpath = encodeURI('/youtube/v3/search?part=snippet&order=viewCount&q=' + name + artname + ' music video&key=AIzaSyCKnojj634as24PXtBsL6KUGxEv53C4W4U');
+                const urlpath = encodeURI('/youtube/v3/search?part=snippet&order=viewCount&q=' + name + artname + ' music video&type=video&videoCategoryId=10&key=AIzaSyCKnojj634as24PXtBsL6KUGxEv53C4W4U');
                 var options = {
                     'method': 'GET',
                     'hostname': 'youtube.googleapis.com',
